@@ -1,21 +1,15 @@
 import pygame
 import random
 
-# Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
-
-# --- Classes
-
-
 class Block(pygame.sprite.Sprite):
-    # """ This class represents the block. """
+    # This class represents the block.
 
     def __init__(self, color):
-        # Call the parent class (Sprite) constructor
         super().__init__()
 
         self.image = pygame.Surface([20, 15])
@@ -23,13 +17,10 @@ class Block(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-
 class Player(pygame.sprite.Sprite):
-    # """ This class represents the Player. """
+    # This class represents the Player.
 
     def __init__(self):
-        # """ Set up the player on creation. """
-        # Call the parent class (Sprite) constructor
         super().__init__()
 
         self.image = pygame.Surface([20, 20])
@@ -43,13 +34,6 @@ class Player(pygame.sprite.Sprite):
         self.moving_down = False
 
     def update(self):
-        # """ Update the player's position. """
-        # Get the current mouse position. This returns the position
-        # as a list of two numbers.
-        # pos = pygame.mouse.get_pos()
-        #
-        # # Set the player x position to the mouse x position
-        # self.rect.x = pos[0]
         if self.moving_right and self.rect.right:
             self.rect.x += 1
         if self.moving_left and self.rect.left:
@@ -59,12 +43,8 @@ class Player(pygame.sprite.Sprite):
         if self.moving_down and self.rect.bottom:
             self.rect.y += 1
 
-
 class Bullet(pygame.sprite.Sprite):
-    # """ This class represents the bullet . """
-
     def __init__(self):
-        # Call the parent class (Sprite) constructor
         super().__init__()
 
         self.image = pygame.Surface([4, 10])
@@ -77,9 +57,6 @@ class Bullet(pygame.sprite.Sprite):
         # """ Move the bullet. """
         self.rect.y -= 3
 
-
-# --- Create the window
-
 # Initialize Pygame
 pygame.init()
 
@@ -87,8 +64,6 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode([screen_width, screen_height])
-
-# --- Sprite lists
 
 # This is a list of every sprite. All blocks and the player block as well.
 all_sprites_list = pygame.sprite.Group()
@@ -99,7 +74,7 @@ block_list = pygame.sprite.Group()
 # List of each bullet
 bullet_list = pygame.sprite.Group()
 
-# --- Create the sprites
+# Create the sprites
 
 for i in range(50):
     # This represents a block
@@ -126,14 +101,12 @@ clock = pygame.time.Clock()
 score = 0
 player.rect.y = 370
 
-# -------- Main Program Loop -----------
+# Main Program Loop
 while not done:
     # --- Event Processing
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        # elif event.type == pygame.SPACE:
-        #     bullet = Bullet()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 player.moving_right = True
@@ -164,8 +137,6 @@ while not done:
             all_sprites_list.add(bullet)
             bullet_list.add(bullet)
 
-    # --- Game logic
-
     # Call the update() method on all the sprites
     all_sprites_list.update()
 
@@ -174,20 +145,13 @@ while not done:
 
         # See if it hit a block
         block_hit_list = pygame.sprite.spritecollide(bullet, block_list, True)
-
-        # For each block hit, remove the bullet and add to the score
         for block in block_hit_list:
             bullet_list.remove(bullet)
             all_sprites_list.remove(bullet)
-            # score += 1
-            # print(score)
-
         # Remove the bullet if it flies up off the screen
         if bullet.rect.y < -10:
             bullet_list.remove(bullet)
             all_sprites_list.remove(bullet)
-
-    # --- Draw a frame
 
     # Clear the screen
     screen.fill(BLACK)
@@ -198,7 +162,7 @@ while not done:
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
 
-    # --- Limit to 20 frames per second
+    # Limit to 20 frames per second
     clock.tick(60)
 
 pygame.quit()
